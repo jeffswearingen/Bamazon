@@ -6,7 +6,8 @@
   "dependencies": {
     "console.table": "^0.8.0",
     "inquirer": "^2.0.0",
-    "json": "^9.0.4"
+    "json": "^9.0.4",
+    "mysql": "^2.12.0"
   },
   "devDependencies": {},
   "scripts": {
