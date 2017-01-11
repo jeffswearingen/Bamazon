@@ -36,7 +36,7 @@ var runInquirer = function() {
 		console.log(answer);
 		console.log(answer.item);
 		console.log(answer.quantity);
-		var query = 'SELECT * FROM Bamazon.Products WHERE ?';
+		var query = 'SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?';
 		console.log(query);
 		connection.query(query, {ItemID:answer.item}, function(err, res) {
 			console.log(res);
@@ -47,14 +47,16 @@ var runInquirer = function() {
 			if (res[0].StockQuantity >= answer.quantity) {
 				var updatedQuantity = res[0].StockQuantity - answer.quantity;
 				console.log(updatedQuantity);
-				connection.query('UPDATE Bamazon.Products SET ? WHERE ?'), [{StockQuantity: updatedQuantity}, {itemID: answer.item}], function(err, res) {
+				connection.query('UPDATE Bamazon.Products SET StockQuantity = updatedQuantity WHERE ?'), {itemID: answer.item}, function(err, res) {
 					console.log('update');
 					console.log(res);
 				};
-				connection.query('SELECT * FROM Bamazon.Products WHERE ?', {ItemID:answer.item}, function(err, res) {
+				connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?', {ItemID:answer.item}, function(err, res) {
 					console.log(res);
 				});
 
+			} else {
+				console.log('Insufficient quantity!');
 			}
 		})
 	})
