@@ -46,15 +46,23 @@ var runInquirer = function() {
 			console.log(res[0].StockQuantity);
 			if (res[0].StockQuantity >= answer.quantity) {
 				var updatedQuantity = res[0].StockQuantity - answer.quantity;
-				console.log(updatedQuantity);
-				connection.query('UPDATE Bamazon.Products SET StockQuantity = updatedQuantity WHERE ?'), {itemID: answer.item}, function(err, res) {
-					console.log('update');
-					console.log(res);
-				};
-				connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?', {ItemID:answer.item}, function(err, res) {
-					console.log(res);
+				console.log('Your total cost of buying ' + answer.quantity + ' units of ' + 
+					res[0].ProductName + ' is $' + (answer.quantity * res[0].Price).toFixed(2));
+				connection.query('UPDATE Bamazon.Products SET ? WHERE ?', 
+					[{
+						StockQuantity: updatedQuantity
+					},
+					{
+						itemID: answer.item
+					}], function(err, res) {
+					console.log('Database updated');
 				});
-
+//				connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?', 
+//					{
+//						ItemID:answer.item
+//					}, function(err, res) {
+//				});
+				connection.end();
 			} else {
 				console.log('Insufficient quantity!');
 			}
