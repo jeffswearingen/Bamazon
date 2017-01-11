@@ -1,0 +1,25 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "BamazonCustomer.js",
+  "dependencies": {
+    "console.table": "^0.8.0",
+    "inquirer": "^2.0.0",
+    "json": "^9.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffswearingen/Bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffswearingen/Bamazon/issues"
+  },
+  "homepage": "https://github.com/jeffswearingen/Bamazon#readme"
+}
