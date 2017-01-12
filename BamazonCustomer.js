@@ -32,18 +32,18 @@ var questions = [
 
 var runInquirer = function() {
 
-	inquirer.prompt(questions).then(function(answer) {
-		console.log(answer);
-		console.log(answer.item);
-		console.log(answer.quantity);
+		inquirer.prompt(questions).then(function(answer) {
+		//console.log(answer);
+		//console.log(answer.item);
+		//console.log(answer.quantity);
 		var query = 'SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?';
-		console.log(query);
+		//console.log(query);
 		connection.query(query, {ItemID:answer.item}, function(err, res) {
-			console.log(res);
+			//console.log(res);
 			if (res.length == 0) {
 				console.log('Invalid item');
 			}
-			console.log(res[0].StockQuantity);
+			//console.log(res[0].StockQuantity);
 			if (res[0].StockQuantity >= answer.quantity) {
 				var updatedQuantity = res[0].StockQuantity - answer.quantity;
 				console.log('Your total cost of buying ' + answer.quantity + ' units of ' + 
