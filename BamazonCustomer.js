@@ -33,11 +33,9 @@ var questions = [
 var runInquirer = function() {
 
 		inquirer.prompt(questions).then(function(answer) {
-		//console.log(answer);
-		//console.log(answer.item);
-		//console.log(answer.quantity);
+
 		var query = 'SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?';
-		//console.log(query);
+
 		connection.query(query, {ItemID:answer.item}, function(err, res) {
 			//console.log(res);
 			if (res.length == 0) {
@@ -57,15 +55,12 @@ var runInquirer = function() {
 					}], function(err, res) {
 					console.log('Database updated');
 				});
-//				connection.query('SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE ?', 
-//					{
-//						ItemID:answer.item
-//					}, function(err, res) {
-//				});
+
 				connection.end();
 			} else {
 				console.log('Insufficient quantity!');
 			}
+			runInquirer();
 		})
 	})
 }
