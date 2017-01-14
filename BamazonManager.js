@@ -72,18 +72,17 @@ var runInquirer = function() {
 					];
 
 					inquirer.prompt(questions_add).then(function(answer_add) {
-						console.log(answer_add.item);
 						var new_quantity = (answer_add.quantity);
 						var prevQuantity = 0;
 						connection.query('SELECT * FROM Bamazon.Products WHERE ?', {itemID:answer_add.item},
 							function(err, res) {
-								console.log('console ' + res[0].StockQuantity);
+							//	console.log('console ' + res[0].StockQuantity);
 								prevQuantity = (res[0].StockQuantity);
-								console.log('a ' + prevQuantity);
+							//	console.log('a ' + prevQuantity);
 								new_quantity = new_quantity + prevQuantity;
-								console.log('pq ' + prevQuantity);
+							//	console.log('pq ' + prevQuantity);
 						
-								console.log('new_quantity ' + new_quantity);
+							//	console.log('new_quantity ' + new_quantity);
 								connection.query('UPDATE Bamazon.Products SET ? WHERE ?', 
 								[{
 									StockQuantity: new_quantity
@@ -92,7 +91,7 @@ var runInquirer = function() {
 									ItemID: answer_add.item
 								}], 
 								function(err, res) {
-									console.log(new_quantity);
+							//		console.log(new_quantity);
 									console.log('Database updated');
 									runInquirer();
 								}
