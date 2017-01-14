@@ -22,7 +22,7 @@ var questions = [
 		name: 'option',
 		type: 'list',
 		message: 'What would you like to do?',
-		choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product'],
+		choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product', 'Exit'],
 		filter: function (val) {
 			return val.toLowerCase();
 		}
@@ -37,7 +37,9 @@ var runInquirer = function() {
 					var query = 'SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products';
 					connection.query(query, function(err, res) {
 						console.table(res);
+						runInquirer();
 					});
+
 					break;
 				}
 
@@ -45,6 +47,7 @@ var runInquirer = function() {
 					var query = 'SELECT ItemID, ProductName, Price, StockQuantity FROM Bamazon.Products WHERE StockQuantity < 5';
 					connection.query(query, function(err, res) {
 						console.table(res);
+						runInquirer();
 					});
 					break;
 				}
@@ -78,31 +81,96 @@ var runInquirer = function() {
 								prevQuantity = (res[0].StockQuantity);
 								console.log('a ' + prevQuantity);
 								new_quantity = new_quantity + prevQuantity;
-							});
-						console.log('pq ' + prevQuantity);
+								console.log('pq ' + prevQuantity);
 						
-						console.log('new_quantity ' + new_quantity);
-						connection.query('UPDATE Bamazon.Products SET ? WHERE ?', 
-							[{
-								StockQuantity: new_quantity
-							}, 
-							{
-								ItemID: answer_add.item
-							}], 
-							function(err, res) {
-								console.log(new_quantity);
-								console.log('Database updated');
-
-							}
-						);
+								console.log('new_quantity ' + new_quantity);
+								connection.query('UPDATE Bamazon.Products SET ? WHERE ?', 
+								[{
+									StockQuantity: new_quantity
+								}, 
+								{
+									ItemID: answer_add.item
+								}], 
+								function(err, res) {
+									console.log(new_quantity);
+									console.log('Database updated');
+									runInquirer();
+								}
+							);
+						});
+					
 					});
+					
 					break;
+				}
+
+				case 'add new product': {
+					var questions_addnew = [
+					{
+						type: 'input',
+						name: 'item',
+						message: 'Please enter product ID: '
+					},
+					{
+						type: 'input',
+						name: 'product',
+						message: 'Please enter product name: '
+					},
+					{
+						type: 'input',
+						name: 'department',
+						message: 'Please enter department: '
+					},
+					{
+						type: 'input',
+						name: 'price',
+						message: 'Please enter price of item: ',	
+						validate: function (value) {
+							var valid = !isNaN(parseFloat(value));
+							return valid || 'Please enter a number';
+						},
+						filter: Number
+					},
+					{
+						type: 'input',
+						name: 'quantity',
+						message: 'Please enter stock quantity: ',
+						validate: function (value) {
+							var valid = !isNaN(parseFloat(value));
+							return valid || 'Please enter a number';
+						},
+						filter: Number
+					}]
+					inquirer.prompt(questions_addnew).then(function(answer_addnew) {
+						connection.query('INSERT INTO Bamazon.Products SET ?', {
+							ItemID: answer_addnew.item, 
+							ProductName: answer_addnew.product, 
+							DepartmentName: answer_addnew.department,
+							Price: answer_addnew.price, 
+							StockQuantity: answer_addnew.quantity}, function(err, res) {
+								if (err) {
+									console.log(err);
+								} else {
+									console.log('adding new product...')
+									runInquirer();
+								}
+						});
+					});	
+					break;
+
+				}
+
+				case 'exit': {
+					console.log('Terminating connection...');
+					connection.end();
 				}
 
 				default: {
 					break;
 				}
+
 			}
+			
 //			connection.end();
 
 			// }
